@@ -5,28 +5,36 @@ import Display from "./components/display";
 import "./index.css";
 
 function App() {
-  const [operandoAtual, setOperandoAtual] = useState("");
+  const [operandoAtual, setOperandoAtual] = useState("0");
   const [operandoAnterior, setOperandoAnterior] = useState("");
   const [ultimoCalculo, setUltimoCalculo] = useState("");
 
   function digito(texto: string) {
-    if (texto === "." && operandoAtual.includes(".")) {
-      return false;
+    console.log(operandoAtual.toString());
+    if (texto === "." && operandoAtual.toString().includes(".")) return false;
+    if (texto === "." && operandoAtual == '0') texto = '0.';
+    
+    //Limpando zeros à esquerda
+    if(operandoAtual.toString().includes(".")){
+      setOperandoAtual(operandoAtual + texto); //Não limpa o zero à esquerda quando seguido de um ponto
+    } else {
+      setOperandoAtual(operandoAtual.toString().replace(/^0+/,'') + texto); // Limpa zeros à esquerda
     }
-    setOperandoAtual(operandoAtual + texto);
   }
 
   function operacao(texto: string) {
-    setOperandoAnterior(operandoAtual + " " + texto);
-    setOperandoAtual("");
+    if(operandoAtual){
+      setOperandoAnterior(operandoAtual + " " + texto);
+      setOperandoAtual("");
+    }
   }
 
   function del() {
-    setOperandoAtual("");
+    setOperandoAtual("0");
   }
 
   function limpar() {
-    setOperandoAtual("");
+    setOperandoAtual("0");
     setOperandoAnterior("");
   }
 
@@ -38,7 +46,7 @@ function App() {
       setOperandoAtual(eval(calculo));
       setOperandoAnterior("");
       setUltimoCalculo(
-        operandoAnterior.replace("÷", "/").replace(/[0-9]/g, "") +
+        operandoAnterior.replace("÷", "/").replaceAll(/[0-9.]/g, "") +
           " " +
           operandoAtual
       );
@@ -48,12 +56,23 @@ function App() {
   useEffect(() => {
     if (operandoAtual) {
       if (operandoAtual == "Infinity") {
-        alert("Calma lá amigao");
+        alert("Calma lá, amigão!");
         setOperandoAtual("");
         setOperandoAnterior("");
       }
     }
   }, [operandoAtual]);
+
+  // function renderizaPrimeiraLinha() {
+  //   return (
+  //     <div>
+  //       <Botao className="span-two" texto="AC" onClick={() => limpar()} />
+  //       <Botao texto="DEL" onClick={() => del()} />
+  //       <Operador texto="÷" onClick={() => operacao("÷")} />
+  //     </div> 
+  //   );
+    
+  // }
 
   return (
     <div className="grid-calculadora">
