@@ -10,7 +10,6 @@ function App() {
   const [ultimoCalculo, setUltimoCalculo] = useState("");
 
   function digito(texto: string) {
-    console.log(operandoAtual.toString());
     if (texto === "." && operandoAtual.toString().includes(".")) return false;
     if (texto === "." && operandoAtual == '0') texto = '0.';
     
