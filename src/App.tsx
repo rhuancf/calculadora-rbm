@@ -2,6 +2,10 @@ import React, { useEffect, useState, useReducer } from "react";
 import Botao from "./components/botao";
 import Operador from "./components/operador";
 import Display from "./components/display";
+import  blackhole  from "./images/blackhole.gif";
+import  explosion  from "./images/explosion.gif";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import "./index.css";
 
 function App() {
@@ -39,10 +43,10 @@ function App() {
 
   function calcular() {
     if (operandoAnterior == "" && ultimoCalculo != "") {
-      setOperandoAtual(eval(operandoAtual + ultimoCalculo));
+      setOperandoAtual(eval(operandoAtual + ultimoCalculo).toString());
     } else {
       const calculo = eval(operandoAnterior.replace("÷", "/") + operandoAtual);
-      setOperandoAtual(eval(calculo));
+      setOperandoAtual(eval(calculo).toString());
       setOperandoAnterior("");
       setUltimoCalculo(
         operandoAnterior.replace("÷", "/").replaceAll(/[0-9.]/g, "") +
@@ -54,25 +58,42 @@ function App() {
 
   useEffect(() => {
     if (operandoAtual) {
+      console.log(operandoAtual)
+      if (operandoAtual == 'NaN') {
+        Swal.fire({
+          title: 'Olha ai o que vc fez!',
+          showConfirmButton: false,
+          color: '#black',
+          background: `transparent`,
+          backdrop: `
+            black
+            url(${blackhole})
+            center
+            no-repeat
+          `
+        })
+        
+        setOperandoAtual("0");
+        setOperandoAnterior("");
+      }
       if (operandoAtual == "Infinity") {
-        alert("Calma lá, amigão!");
-        setOperandoAtual("");
+        Swal.fire({
+          imageUrl: `${explosion}`,
+          imageWidth: 600,
+          imageHeight: 700,
+          imageAlt: 'Custom image',
+          position: 'top',
+          showConfirmButton: false,
+          backdrop: 'black',
+          background: `transparent url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/dc214649-d3ae-4d8c-88bf-03d4e8a4c80c/de10a2n-e3c380e5-e331-42bb-a080-1aedc2eab018.gif?token)`,
+          
+        })
+        setOperandoAtual("0");
         setOperandoAnterior("");
       }
     }
   }, [operandoAtual]);
-
-  // function renderizaPrimeiraLinha() {
-  //   return (
-  //     <div>
-  //       <Botao className="span-two" texto="AC" onClick={() => limpar()} />
-  //       <Botao texto="DEL" onClick={() => del()} />
-  //       <Operador texto="÷" onClick={() => operacao("÷")} />
-  //     </div> 
-  //   );
-    
-  // }
-
+  
   return (
     <div className="grid-calculadora">
       <Display operandoAtual={operandoAtual} operandoAnterior={operandoAnterior} />
