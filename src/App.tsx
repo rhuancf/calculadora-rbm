@@ -85,7 +85,7 @@ function App() {
           position: 'top',
           showConfirmButton: false,
           backdrop: 'black',
-          background: `transparent url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/dc214649-d3ae-4d8c-88bf-03d4e8a4c80c/de10a2n-e3c380e5-e331-42bb-a080-1aedc2eab018.gif?token)`,
+          background: `transparent`,
           
         })
         setOperandoAtual("0");
@@ -95,10 +95,10 @@ function App() {
   }, [operandoAtual]);
   
   return (
-    <div className="grid-calculadora">
+    <main className="grid-calculadora">
       <Display operandoAtual={operandoAtual} operandoAnterior={operandoAnterior} />
-      <Botao className="span-two" texto="AC" onClick={() => limpar()} />
-      <Botao texto="DEL" onClick={() => del()} />
+      <Botao className="span-two" texto="AC" onClick={limpar} />
+      <Botao texto="DEL" onClick={del} />
       <Operador texto="÷" onClick={() => operacao("÷")} />
       <Botao texto="7" onClick={() => digito("7")} />
       <Botao texto="8" onClick={() => digito("8")} />
@@ -114,8 +114,8 @@ function App() {
       <Operador texto="-" onClick={() => operacao("-")} />
       <Botao texto="." onClick={() => digito(".")} />
       <Botao texto="0" onClick={() => digito("0")} />
-      <Botao className="span-two" texto="=" onClick={() => calcular()} />
-    </div>
+      <Botao className="span-two" texto="=" onClick={calcular} />
+    </main>
   );
 }
 
